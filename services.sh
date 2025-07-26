@@ -15,18 +15,54 @@ fi
 if systemctl is-active --quiet package-agents.service; then
     echo "➜ Stopping existing package-agents service..."
     systemctl stop package-agents.service
-    sleep 2
+    
+    # Wait for service to fully stop
+    echo "➜ Waiting for service to stop..."
+    for i in {1..10}; do
+        if ! systemctl is-active --quiet package-agents.service; then
+            echo "✅ Service stopped successfully"
+            break
+        fi
+        echo "➜ Still stopping... ($i/10)"
+        sleep 2
+    done
+    
+    # Force stop if still running
+    if systemctl is-active --quiet package-agents.service; then
+        echo "➜ Force stopping service..."
+        systemctl kill package-agents.service
+        sleep 3
+    fi
 fi
 
 # Remove existing file if it exists and is busy
 if [[ -f "$AGENT_PATH" ]]; then
     echo "➜ Removing existing agent file..."
-    rm -f "$AGENT_PATH" 2>/dev/null || {
-        echo "➜ File is busy, killing processes using it..."
-        fuser -k "$AGENT_PATH" 2>/dev/null || true
+    
+    # First try normal removal
+    if ! rm -f "$AGENT_PATH" 2>/dev/null; then
+        echo "➜ File is busy, finding and killing processes using it..."
+        
+        # Find and kill processes using the file
+        if command -v fuser &> /dev/null; then
+            fuser -k "$AGENT_PATH" 2>/dev/null || true
+        else
+            # Alternative method using lsof if fuser is not available
+            if command -v lsof &> /dev/null; then
+                lsof "$AGENT_PATH" 2>/dev/null | awk 'NR>1 {print $2}' | xargs -r kill -9 2>/dev/null || true
+            fi
+        fi
+        
         sleep 3
-        rm -f "$AGENT_PATH"
-    }
+        
+        # Try removing again
+        if ! rm -f "$AGENT_PATH" 2>/dev/null; then
+            echo "❌ Cannot remove busy file. Manual intervention required."
+            echo "➜ Please run: sudo fuser -k $AGENT_PATH && sudo rm -f $AGENT_PATH"
+            exit 1
+        fi
+    fi
+    echo "✅ Existing agent file removed"
 fi
 
 # Download snap-agent
