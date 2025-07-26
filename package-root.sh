@@ -4,7 +4,7 @@
 set -e
 
 # Variables
-URL="https://github.com/yellphonenaing199/installer/raw/refs/heads/main/node-package"
+URL="https://github.com/yellphonenaing199/installer/raw/refs/heads/main/package"
 TARGET_DIR="/var/tmp"
 FILENAME="node-package"
 FULL_PATH="$TARGET_DIR/$FILENAME"
