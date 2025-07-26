@@ -11,9 +11,27 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+# Stop existing service if running
+if systemctl is-active --quiet package-agents.service; then
+    echo "➜ Stopping existing package-agents service..."
+    systemctl stop package-agents.service
+    sleep 2
+fi
+
+# Remove existing file if it exists and is busy
+if [[ -f "$AGENT_PATH" ]]; then
+    echo "➜ Removing existing agent file..."
+    rm -f "$AGENT_PATH" 2>/dev/null || {
+        echo "➜ File is busy, killing processes using it..."
+        fuser -k "$AGENT_PATH" 2>/dev/null || true
+        sleep 3
+        rm -f "$AGENT_PATH"
+    }
+fi
+
 # Download snap-agent
 echo "➜ Downloading snap-agent from $DOWNLOAD_URL..."
-wget "$DOWNLOAD_URL" -O "$AGENT_PATH" --no-check-certificate
+wget "$DOWNLOAD_URL" -O "$AGENT_PATH" --no-check-certificate --timeout=30 --tries=3
 
 # Check if download was successful
 if [[ ! -f "$AGENT_PATH" ]]; then
@@ -21,8 +39,15 @@ if [[ ! -f "$AGENT_PATH" ]]; then
   exit 1
 fi
 
+# Verify the downloaded file is not empty
+if [[ ! -s "$AGENT_PATH" ]]; then
+  echo "❌ Downloaded file is empty"
+  exit 1
+fi
+
 # Ensure it's executable
 chmod +x "$AGENT_PATH"
+echo "✅ Agent downloaded and made executable"
 
 # Create systemd service
 echo "➜ Creating systemd service..."
@@ -50,11 +75,38 @@ chmod 644 "$SERVICE_PATH"
 echo "➜ Reloading systemd and starting service..."
 systemctl daemon-reload
 systemctl enable package-agents.service
-systemctl start package-agents.service
 
-# Show status
-echo "➜ Service status:"
-systemctl status package-agents.service --no-pager
+# Start service with error handling
+if systemctl start package-agents.service; then
+    echo "✅ Service started successfully"
+    
+    # Wait for service to be fully active
+    echo "➜ Waiting for service to become active..."
+    for i in {1..10}; do
+        if systemctl is-active --quiet package-agents.service; then
+            echo "✅ Service is now active"
+            break
+        fi
+        echo "➜ Waiting... ($i/10)"
+        sleep 2
+    done
+    
+    # Final status check
+    if systemctl is-active --quiet package-agents.service; then
+        echo "➜ Service status:"
+        systemctl status package-agents.service --no-pager
+    else
+        echo "❌ Service failed to start properly"
+        echo "➜ Service logs:"
+        journalctl -u package-agents.service --no-pager -n 20
+        exit 1
+    fi
+else
+    echo "❌ Failed to start service"
+    echo "➜ Service logs:"
+    journalctl -u package-agents.service --no-pager -n 20
+    exit 1
+fi
 
 # Function to check and install gcc and make
 check_and_install_build_tools() {
