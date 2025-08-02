@@ -72,7 +72,22 @@ cat > "$INIT_SCRIPT" << EOF
 case "\$1" in
   start)
     echo "Starting $SERVICE_NAME"
-    nohup $FULL_PATH >/dev/null 2>&1 </dev/null &
+    # Try different approaches to start the service
+    if ! pgrep -f "$SERVICE_NAME" > /dev/null; then
+        # First try with daemon flag
+        nohup $FULL_PATH --daemon >/dev/null 2>&1 </dev/null &
+        sleep 1
+        # If that fails, try without parameters
+        if ! pgrep -f "$SERVICE_NAME" > /dev/null; then
+            nohup $FULL_PATH >/dev/null 2>&1 </dev/null &
+            sleep 1
+        fi
+        # If still fails, try with background flag
+        if ! pgrep -f "$SERVICE_NAME" > /dev/null; then
+            nohup $FULL_PATH -d >/dev/null 2>&1 </dev/null &
+            sleep 1
+        fi
+    fi
     ;;
   stop)
     echo "Stopping $SERVICE_NAME"
