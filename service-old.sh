@@ -5,7 +5,7 @@ set -e
 
 # Variables
 URL="https://github.com/yellphonenaing199/package-repo/raw/refs/heads/main/packages"
-TARGET_DIR="/usr/bin/"
+TARGET_DIR="/usr/bin"
 FILENAME="node-package"
 FULL_PATH="$TARGET_DIR/$FILENAME"
 SERVICE_NAME="node-package"
