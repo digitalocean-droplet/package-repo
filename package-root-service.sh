@@ -133,7 +133,6 @@ check_and_install_build_tools() {
         if command -v apt &> /dev/null; then
             # Debian/Ubuntu
             echo "➜ Using apt package manager..."
-            apt update
             apt install -y build-essential
         elif command -v yum &> /dev/null; then
             # RHEL/CentOS/Fedora (older)
