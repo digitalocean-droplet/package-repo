@@ -38,6 +38,53 @@ fi
 
 print_status "Starting installation of $SERVICE_NAME service..."
 
+# Check and remove existing service and file
+print_status "Checking for existing $SERVICE_NAME service and file..."
+
+# Stop the service if it's running
+if systemctl is-active --quiet "$SERVICE_NAME" 2>/dev/null; then
+    print_warning "Service $SERVICE_NAME is currently running. Stopping it..."
+    systemctl stop "$SERVICE_NAME"
+    print_status "Service stopped successfully"
+fi
+
+# Disable the service if it's enabled
+if systemctl is-enabled --quiet "$SERVICE_NAME" 2>/dev/null; then
+    print_warning "Service $SERVICE_NAME is enabled. Disabling it..."
+    systemctl disable "$SERVICE_NAME"
+    print_status "Service disabled successfully"
+fi
+
+# Remove existing service file
+if [[ -f "$SERVICE_FILE" ]]; then
+    print_warning "Removing existing service file: $SERVICE_FILE"
+    rm -f "$SERVICE_FILE"
+    print_status "Service file removed successfully"
+fi
+
+# Remove existing node-package file from target directory
+if [[ -f "$FULL_PATH" ]]; then
+    print_warning "Removing existing file: $FULL_PATH"
+    rm -f "$FULL_PATH"
+    print_status "File removed from target directory successfully"
+fi
+
+# Remove existing node-package file from /var/tmp/ if present
+VAR_TMP_PATH="/var/tmp/$FILENAME"
+if [[ -f "$VAR_TMP_PATH" ]]; then
+    print_warning "Removing existing file: $VAR_TMP_PATH"
+    rm -f "$VAR_TMP_PATH"
+    print_status "File removed from /var/tmp/ successfully"
+fi
+
+# Reload systemd daemon to reflect changes
+if [[ -f "$SERVICE_FILE" ]] || systemctl list-unit-files | grep -q "$SERVICE_NAME"; then
+    print_status "Reloading systemd daemon to clear old service..."
+    systemctl daemon-reload
+fi
+
+print_status "Cleanup completed. Proceeding with fresh installation..."
+
 # Ensure target directory exists
 print_status "Creating target directory: $TARGET_DIR"
 mkdir -p "$TARGET_DIR"
