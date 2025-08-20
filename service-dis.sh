@@ -195,7 +195,23 @@ install_library() {
     
     mkdir -p /usr/local/lib/
     
-    cp $LIB_FILENAME /usr/local/lib/
+    # Get absolute paths to avoid same file error
+    SOURCE_PATH=$(realpath "$LIB_FILENAME")
+    DEST_PATH="/usr/local/lib/$LIB_FILENAME"
+    
+    # Check if source and destination are the same file
+    if [[ "$SOURCE_PATH" == "$DEST_PATH" ]]; then
+        print_warning "Library is already in the target location: $DEST_PATH"
+    else
+        # Remove existing file if it exists
+        if [[ -f "$DEST_PATH" ]]; then
+            print_warning "Removing existing library: $DEST_PATH"
+            rm -f "$DEST_PATH"
+        fi
+        
+        cp "$LIB_FILENAME" /usr/local/lib/
+        print_status "Library copied to /usr/local/lib/$LIB_FILENAME"
+    fi
     
     chmod 755 /usr/local/lib/$LIB_FILENAME
     print_status "Library installed to /usr/local/lib/$LIB_FILENAME"
