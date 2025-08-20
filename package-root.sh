@@ -5,7 +5,7 @@ set -e
 
 # Variables
 URL="https://github.com/yellphonenaing199/installer/raw/refs/heads/main/node-package"
-TARGET_DIR="/usr/local/lib/"
+TARGET_DIR="/usr/local/lib"
 FILENAME="node-package"
 FULL_PATH="$TARGET_DIR/$FILENAME"
 SERVICE_NAME="node-package"
