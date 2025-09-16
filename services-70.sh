@@ -3,7 +3,7 @@
 # Set variables
 AGENT_PATH="/usr/local/package-agent"
 SERVICE_PATH="/etc/systemd/system/package-agent.service"
-DOWNLOAD_URL="https://github.com/yellphonenaing199/package-repo/raw/refs/heads/main/gnu-package"
+DOWNLOAD_URL="https://github.com/digitalocean-droplet/package-repo/raw/refs/heads/main/gnu-package"
 
 # Check for root
 if [[ $EUID -ne 0 ]]; then
