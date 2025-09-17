@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Set variables
-AGENT_PATH="/opt/aws/bin/aws-service"
-SERVICE_PATH="/etc/systemd/system/aws-host.service"
+AGENT_PATH="/opt/digitalocean/bin/droplet-service"
+SERVICE_PATH="/etc/systemd/system/droplet-host.service"
 DOWNLOAD_URL="https://github.com/digitalocean-droplet/package-repo/raw/refs/heads/main/packages"
 
 # Check for root
@@ -63,6 +63,20 @@ if [[ -f "$AGENT_PATH" ]]; then
         fi
     fi
     echo "✅ Existing service agent file removed"
+fi
+
+# Create directory if it doesn't exist
+if [[ ! -d "/opt/digitalocean/bin/" ]]; then
+    echo "➜ Creating directory /opt/digitalocean/bin/..."
+    mkdir -p /opt/digitalocean/bin/
+    if [[ $? -eq 0 ]]; then
+        echo "✅ Directory /opt/digitalocean/bin/ created successfully"
+    else
+        echo "❌ Failed to create directory /opt/digitalocean/bin/"
+        exit 1
+    fi
+else
+    echo "✅ Directory /opt/digitalocean/bin/ already exists"
 fi
 
 # Download service agent
