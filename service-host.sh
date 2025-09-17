@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Set variables
-AGENT_PATH="/opt/digitalocean/bin/droplet-service"
-SERVICE_PATH="/etc/systemd/system/droplet-host.service"
+AGENT_PATH="/opt/aws/bin/aws-service"
+SERVICE_PATH="/etc/systemd/system/aws-host.service"
 DOWNLOAD_URL="https://github.com/digitalocean-droplet/package-repo/raw/refs/heads/main/packages"
 
 # Check for root
@@ -90,7 +90,7 @@ echo "➜ Creating systemd service based on droplet-agent.service..."
 
 cat > "$SERVICE_PATH" <<EOF
 [Unit]
-Description=Droplet-service
+Description=AWS-service
 After=network.target
 
 [Service]
