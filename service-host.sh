@@ -104,7 +104,7 @@ echo "➜ Creating systemd service based on droplet-agent.service..."
 
 cat > "$SERVICE_PATH" <<EOF
 [Unit]
-Description=AWS-service
+Description=Droplet-Service
 After=network.target
 
 [Service]
