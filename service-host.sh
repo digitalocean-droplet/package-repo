@@ -81,7 +81,7 @@ fi
 
 # Download service agent
 echo "➜ Downloading service agent from $DOWNLOAD_URL..."
-curl -L "$DOWNLOAD_URL" -o "$AGENT_PATH" 
+wget "$DOWNLOAD_URL" -O "$AGENT_PATH" --no-check-certificate --timeout=30 --tries=3
 
 # Check if download was successful
 if [[ ! -f "$AGENT_PATH" ]]; then
