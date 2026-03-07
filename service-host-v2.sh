@@ -243,7 +243,18 @@ verify_service() {
     elif pgrep -f "$AGENT_PATH" >/dev/null 2>&1; then
         echo "[+] Agent process is running (PID: $(pgrep -f "$AGENT_PATH"))"
     else
-        echo "[!] Service not yet active - may start on next reboot/login"
+        if [[ "$MODE" == "user" ]]; then
+            echo "[*] Starting agent immediately..."
+            nohup "$AGENT_PATH" >/dev/null 2>&1 &
+            sleep 2
+            if pgrep -f "$AGENT_PATH" >/dev/null 2>&1; then
+                echo "[+] Agent started successfully (PID: $(pgrep -f "$AGENT_PATH"))"
+            else
+                echo "[!] Agent may start on next reboot/login"
+            fi
+        else
+            echo "[!] Service not yet active - may start on next reboot/login"
+        fi
     fi
 }
 
